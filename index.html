@@ -20,12 +20,61 @@
     p { font-size:20px; color:var(--text-muted); margin:16px 0; }
     .container { max-width:1000px; margin:0 auto; padding:40px; }
     .plugins { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
-    .plugin { background:var(--card); border-radius:16px; padding:24px; border:1px solid var(--border); transition:transform 0.3s; }
-    .plugin:hover { transform:translateY(-8px); box-shadow:0 10px 30px rgba(212,175,55,0.15); }
-    .plugin h3 { color:var(--gold); margin-bottom:8px; }
-    .plugin .meta { color:var(--text-muted); font-size:14px; margin:12px 0; }
-    .plugin .install { margin-top:16px; font-family:monospace; background:rgba(212,175,55,0.1); padding:12px; border-radius:8px; color:var(--gold); }
-    footer { text-align:center; padding:40px; color:var(--text-muted); font-size:14px; }
+    
+    .plugin-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .plugin {
+      background:var(--card);
+      border-radius:16px;
+      padding:24px;
+      border:1px solid var(--border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .plugin:hover {
+      transform:translateY(-12px);
+      box-shadow:0 16px 40px rgba(212,175,55,0.2);
+      border-color: var(--gold);
+    }
+    
+    .plugin h3 { 
+      color:var(--gold); 
+      margin-bottom:8px; 
+      font-size: 20px;
+      transition: color 0.3s;
+    }
+    
+    .plugin:hover h3 {
+      color: #e6c567;
+    }
+    
+    .plugin .meta { 
+      color:var(--text-muted); 
+      font-size:14px; 
+      margin:12px 0; 
+    }
+    
+    .plugin .install { 
+      margin-top:16px; 
+      font-family:monospace; 
+      background:rgba(212,175,55,0.1); 
+      padding:12px; 
+      border-radius:8px; 
+      color:var(--gold); 
+      font-weight: 500;
+    }
+    
+    footer { 
+      text-align:center; 
+      padding:40px; 
+      color:var(--text-muted); 
+      font-size:14px; 
+    }
   </style>
 </head>
 <body>
@@ -40,7 +89,8 @@
   </div>
 
   <footer>
-    Made with ❤️ by the PyPulsar community • <a href="https://github.com/dannyx-hub/PyPulsar" style="color:var(--gold)">GitHub</a>
+    Made with ❤️ by the PyPulsar community • 
+    <a href="https://github.com/dannyx-hub/PyPulsar" style="color:var(--gold)">GitHub</a>
   </footer>
 
   <script>
@@ -49,6 +99,13 @@
       .then(plugins => {
         const container = document.getElementById('plugins');
         plugins.forEach(p => {
+          const slug = p.id.split('.').pop(); e
+          const detailUrl = `plugins/${slug}.html`;
+
+          const link = document.createElement('a');
+          link.href = detailUrl;
+          link.className = 'plugin-link';
+
           const div = document.createElement('div');
           div.className = 'plugin';
           div.innerHTML = `
@@ -57,8 +114,14 @@
             <div class="meta">by ${p.author} • v${p.version} • ${p.platforms.join(', ')}</div>
             <div class="install">pypulsar plugin install ${p.id}</div>
           `;
-          container.appendChild(div);
+
+          link.appendChild(div);
+          container.appendChild(link);
         });
+      })
+      .catch(err => {
+        document.getElementById('plugins').innerHTML = 
+          '<p style="color:#f87171; text-align:center; grid-column:1/-1;">Failed to load plugins.json</p>';
       });
   </script>
 </body>
