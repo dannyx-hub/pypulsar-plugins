@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyPulsar Plugins</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a1a12;
+      --card: rgba(20, 40, 30, 0.8);
+      --gold: #d4af37;
+      --text: #e8e8e0;
+      --text-muted: #a0a09a;
+      --border: rgba(212, 175, 55, 0.2);
+    }
+    body { margin:0; font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    header { background:var(--card); padding:40px; text-align:center; border-bottom:1px solid var(--border); }
+    h1 { font-size:48px; background:linear-gradient(90deg,#d4af37,#e6c567); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    p { font-size:20px; color:var(--text-muted); margin:16px 0; }
+    .container { max-width:1000px; margin:0 auto; padding:40px; }
+    .plugins { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
+    .plugin { background:var(--card); border-radius:16px; padding:24px; border:1px solid var(--border); transition:transform 0.3s; }
+    .plugin:hover { transform:translateY(-8px); box-shadow:0 10px 30px rgba(212,175,55,0.15); }
+    .plugin h3 { color:var(--gold); margin-bottom:8px; }
+    .plugin .meta { color:var(--text-muted); font-size:14px; margin:12px 0; }
+    .plugin .install { margin-top:16px; font-family:monospace; background:rgba(212,175,55,0.1); padding:12px; border-radius:8px; color:var(--gold); }
+    footer { text-align:center; padding:40px; color:var(--text-muted); font-size:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PyPulsar Plugins</h1>
+    <p>Extend your PyPulsar apps with community plugins</p>
+    <p><code>pypulsar plugin list</code> • <code>pypulsar plugin install &lt;id&gt;</code></p>
+  </header>
+
+  <div class="container">
+    <div class="plugins" id="plugins"></div>
+  </div>
+
+  <footer>
+    Made with ❤️ by the PyPulsar community • <a href="https://github.com/dannyx-hub/PyPulsar" style="color:var(--gold)">GitHub</a>
+  </footer>
+
+  <script>
+    fetch('index.json')
+      .then(r => r.json())
+      .then(plugins => {
+        const container = document.getElementById('plugins');
+        plugins.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'plugin';
+          div.innerHTML = `
+            <h3>${p.name}</h3>
+            <p>${p.description}</p>
+            <div class="meta">by ${p.author} • v${p.version} • ${p.platforms.join(', ')}</div>
+            <div class="install">pypulsar plugin install ${p.id}</div>
+          `;
+          container.appendChild(div);
+        });
+      });
+  </script>
+</body>
+</html>
