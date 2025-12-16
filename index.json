@@ -3,7 +3,7 @@
     "id": "pypulsar.notifications",
     "name": "Notifications",
     "description": "Native system notifications using plyer (Windows/Linux) and pync (macOS)",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "author": "dannyx-hub",
     "repo": "https://github.com/dannyx-hub/pypulsar-notifications",
     "entry": "notify.py",
