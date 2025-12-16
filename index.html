@@ -94,35 +94,42 @@
   </footer>
 
   <script>
-    fetch('index.json')
-      .then(r => r.json())
-      .then(plugins => {
-        const container = document.getElementById('plugins');
-        plugins.forEach(p => {
-          const slug = p.id.split('.').pop(); e
-          const detailUrl = `plugins/${slug}.html`;
+  fetch('index.json')
+    .then(r => r.json())
+    .then(plugins => {
+      const container = document.getElementById('plugins');
 
-          const link = document.createElement('a');
-          link.href = detailUrl;
-          link.className = 'plugin-link';
+      plugins.forEach(p => {
+        const slug = p.id.split('.').pop();
+        const detailUrl = `plugins/${slug}.html`;
 
-          const div = document.createElement('div');
-          div.className = 'plugin';
-          div.innerHTML = `
-            <h3>${p.name}</h3>
-            <p>${p.description}</p>
-            <div class="meta">by ${p.author} • v${p.version} • ${p.platforms.join(', ')}</div>
-            <div class="install">pypulsar plugin install ${p.id}</div>
-          `;
+        const link = document.createElement('a');
+        link.href = detailUrl;
+        link.className = 'plugin-link';
 
-          link.appendChild(div);
-          container.appendChild(link);
-        });
-      })
-      .catch(err => {
-        document.getElementById('plugins').innerHTML = 
-          '<p style="color:#f87171; text-align:center; grid-column:1/-1;">Failed to load plugins.json</p>';
+        const div = document.createElement('div');
+        div.className = 'plugin';
+        div.innerHTML = `
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <div class="meta">
+            by ${p.author} • v${p.version} • ${p.platforms.join(', ')}
+          </div>
+          <div class="install">
+            pypulsar plugin install ${p.id}
+          </div>
+        `;
+
+        link.appendChild(div);
+        container.appendChild(link);
       });
-  </script>
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('plugins').innerHTML =
+        '<p style="color:#f87171; text-align:center; grid-column:1/-1;">Failed to load index.json</p>';
+    });
+</script>
+
 </body>
 </html>
